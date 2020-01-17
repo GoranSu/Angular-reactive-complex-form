@@ -1,0 +1,12 @@
+  <form [formGroup]="phoneFormGroup">
+    <div class="row">
+    <mat-form-field class="idSize">
+      <input matInput formControlName="id" placeholder="ID" required/>
+      <mat-error>Required.</mat-error>
+    </mat-form-field>
+    <mat-form-field class="breaker">
+      <input matInput type="number" formControlName="number" placeholder="Number" required/>
+      <mat-error>{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+  </div>
+  </form>

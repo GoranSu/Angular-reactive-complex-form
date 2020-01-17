@@ -1,0 +1,142 @@
+<!--Header-->
+<div class="mat-elevation-z1">
+  <div class="container">
+    <div class="row">
+      <div *ngIf="contact?.picture" class="col-2">
+        <img [src]="contact?.picture" height="80px" />
+      </div>
+        <div *ngIf="!contact?.picture" class="col-2">
+          <mat-icon>
+            contacts
+          </mat-icon>
+        </div>
+        <div class="col-2" *ngIf="!hide">
+          <button mat-icon-button (click)="openFileInput()" >
+            <mat-icon>attachment</mat-icon>
+          </button>
+          <input id="fileInput" hidden type="file" (change)="onFileChange($event)"/>
+        </div>
+      <div class="col-5">
+        {{contact.firstName}} {{contact.lastName}}
+      </div>
+      <div class="col-3">
+        <div class="row" *ngIf="!hide">
+        <p>Form status: </p>&nbsp;
+        <p *ngIf="contactForm.valid">
+            <mat-icon style="color: green;">done_outline</mat-icon>
+        </p>
+        <p *ngIf="contactForm.invalid">
+            <mat-icon style="color: red;">error_outline</mat-icon>
+        </p>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Header-->
+<mat-dialog-content class="content">
+  <!--Form begins-->
+  <form [formGroup]="contactForm">
+    <div class="mat-elevation-z2">
+      <div class="row">
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="First name" required>
+            <mat-error>Name is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="lname" placeholder="Last name" required>
+            <mat-error>Last name is required.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="age" placeholder="Age">
+          </mat-form-field>
+        </div>
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="email" placeholder="Email" required>
+            <mat-error>{{getEmailErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="company" placeholder="Company">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div formArrayName='address'>
+        <div *ngFor="let add of getAddress(contactForm); let i=index" class="mat-elevation-z5">
+        <!--Address-->
+        <h4>Address {{i+1}}:</h4>
+        <div [formGroupName]="i">
+          <div class="row">
+            <mat-form-field class="breaker">
+              <input matInput formControlName="street" placeholder="Street" required>
+              <mat-error>Street is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="breaker">
+              <input matInput formControlName="streetNumber" placeholder="Street number" required>
+              <mat-error>Street number is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="breaker">
+              <input matInput formControlName="city" placeholder="City">
+            </mat-form-field>
+            <mat-form-field class="breaker">
+              <input matInput formControlName="zipCode" placeholder="ZipCode">
+              <mat-error>{{getZipCodeErrorMessage(i)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="breaker">
+              <input matInput formControlName="state" placeholder="State">
+            </mat-form-field>
+          </div>
+          <div formArrayName="telephone">
+            <div *ngFor="let project of getPhones(add); let j=index">
+              <!--Telephone array iterations-->
+              <div [formGroupName]="j">
+                <div class="row">
+                  <div class="breaker">
+                  <app-phone-reactive-form formGroupName="phones"></app-phone-reactive-form>
+                </div>
+                  <!--Delete telephone-->
+                  <button class="breaker" [hidden]="contactForm.disabled" mat-icon-button (click)="deletePhonePrompt(add.controls.telephone, j)">
+                    <mat-icon>
+                      delete
+                    </mat-icon>
+                  </button>
+                  <!--Delete telephone-->
+                </div>
+              </div>
+              <!--Telephone array iterations-->
+            </div>
+            <button mat-stroked-button color="primary" [disabled]="!contactForm.valid" [hidden]="contactForm.disabled" (click)="addNewPhone(add.controls.telephone)">
+              Add new phone
+            </button>
+            &nbsp;
+              <!--Delete address-->
+            <button mat-stroked-button type="button" color="warn" (click)="deleteAddressPrompt(i)" [hidden]="contactForm.disabled">
+              Delete address
+            </button>
+            <!--Delete address-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <button mat-stroked-button color="primary" [hidden]="contactForm.disabled" [disabled]="!contactForm.valid" (click)="addNewAddress()">Add new
+      address
+    </button>
+  </form>
+  <!--Form ends-->
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button *ngIf="action === 'view'" mat-raised-button mat-dialog-close (click)="dialogRef.close('edit')">Edit</button>
+  <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-raised-button (click)="delete()">Delete</button>
+  <button mat-raised-button color="primary" [disabled]="!contactForm.valid" [hidden]="contactForm.disabled" (click)="saveForm()">Save</button>
+</mat-dialog-actions>

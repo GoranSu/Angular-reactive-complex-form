@@ -1,0 +1,31 @@
+.breaker {
+  padding-left: 10px;
+}
+
+.mat-elevation-z5 {
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.mat-elevation-z2 {
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.mat-elevation-z1 {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.content {
+  padding-bottom: 10px;
+}
+
+.col-2 {
+  align-self: center;
+}
+.commentPanel {
+  width: 100%;
+}

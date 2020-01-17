@@ -1,0 +1,23 @@
+table.mat-table {
+  width:100%;
+}
+
+.mat-column-buttons {
+  flex: 0 1 80px;
+}
+
+.img {
+  border-radius: 50%;
+  height:60px;
+}
+
+.centerMe {
+  margin: auto;
+  display: block;
+}
+
+
+td.mat-cell:last-child, td.mat-footer-cell:last-child, th.mat-header-cell:last-child {
+
+width: 5%
+}

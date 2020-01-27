@@ -1,11 +1,19 @@
-<div class="row">
-  <button class="centerMe" mat-icon-button color="blue-grey-200-bg" (click)="openDialog('create', null)">
-    <mat-icon>person_add</mat-icon>
+
+
+<mat-toolbar>
+  <span>Search contacts:</span>
+  <mat-form-field>
+    <input matInput [(ngModel)]="filterValue" [disabled]="dataSource.data.length === 0" (keyup)="applyFilter($event.target.value)">
+  </mat-form-field>
+  <button mat-icon-button (click)="clearFilter()" [disabled]="dataSource.data.length === 0">
+    <mat-icon>
+      highlight_off
+    </mat-icon>
   </button>
-  <button *ngIf="selection.hasValue()" class="centerMe" mat-raised-button color="primary" (click)="removeSelectedRows()">
-    Remove Selected Rows
-  </button>
-</div>
+  <span class="spacer"></span>
+  <button *ngIf="selection.hasValue()" mat-stroked-button color="warn" (click)="removeSelectedRows()">Delete selection</button>
+  <button mat-stroked-button color="primary" (click)="openDialog('create', null)">Add contact</button>
+</mat-toolbar>
 
   <table  mat-table #table [dataSource]="dataSource" matSort aria-label="Elements">
 

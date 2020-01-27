@@ -6,9 +6,13 @@ table.mat-table {
   flex: 0 1 80px;
 }
 
+.mat-stroked-button {
+  margin-right: 10px;
+}
+
 .img {
   border-radius: 50%;
-  height:60px;
+  height:40px;
 }
 
 .centerMe {
@@ -16,8 +20,40 @@ table.mat-table {
   display: block;
 }
 
+span {
+  margin-right: 5px;
+}
 
 td.mat-cell:last-child, td.mat-footer-cell:last-child, th.mat-header-cell:last-child {
 
 width: 5%
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-column-select {
+  width: 5%;
+}
+.mat-column-picture {
+  width: 5%;
+}
+.mat-column-firstName {
+  width: 21%;
+}
+.mat-column-lastName {
+  width: 21%;
+}
+.mat-column-age {
+  width: 5%;
+}
+.mat-column-company {
+  width: 21%;
+}
+.mat-column-balance {
+  width: 21%;
+}
+.mat-column-buttons {
+  width: 1%;
 }

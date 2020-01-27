@@ -19,6 +19,7 @@ export class MyTableComponent implements OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'age', 'company', 'balance', 'buttons'];
   dialogRef: any;
+  filterValue: string = '';
 
   constructor(private dialog: MatDialog) { }
 
@@ -27,6 +28,17 @@ export class MyTableComponent implements OnInit {
      this.dataSource = new MatTableDataSource(this.materialTableData);
      this.dataSource.paginator = this.paginator;
   }
+
+  applyFilter(filterValue: string) {
+    console.log(filterValue)
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  clearFilter() {
+    this.filterValue = '';
+    this.dataSource.filter = '';
+  }
+
   // toggle select all
   masterToggle() {
     this.isAllSelected() ?
@@ -77,9 +89,7 @@ export class MyTableComponent implements OnInit {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         // If there is a result, call the delete method with params
-        console.log(row);
         const indexOf = this.dataSource.data.findIndex(i => i.guid === row.guid);
-        console.log(indexOf);
         if (indexOf !== -1) {
           this.dataSource.data.splice(indexOf, 1);
           this.dataSource = new MatTableDataSource<Contact>(this.dataSource.data);
@@ -110,15 +120,32 @@ export class MyTableComponent implements OnInit {
         if (!result) {
           return;
         } else if (result === 'edit') {
-          console.log('edit')
           this.openDialog('edit', row);
         } else if (result === 'delete') {
-          console.log(formValue)
           this.deletePrompt(formValue);
         } else if (result === 'save') {
-          console.log(formValue);
+          this.createContact(formValue);
         }
       });
+  }
+
+createGuid() {  
+   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {  
+      var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);  
+      return v.toString(16);  
+   });
+} 
+
+  createContact(contact: Contact) {
+    if(contact.guid){
+      // update
+      console.log('update')
+    } else {
+      contact.guid = this.createGuid();
+      this.materialTableData.push(contact);
+      this.dataSource = new MatTableDataSource(this.materialTableData);
+      this.dataSource.paginator = this.paginator;
+    }
   }
 }
 
@@ -133,7 +160,6 @@ export class Contact {
   lastName?: string;
   company?: string;
   email?: string;
-  phone?: string;
   address?: Address[] = [];
   about?: string;
 }
@@ -165,7 +191,6 @@ const Contact_data: Contact[] = [
     lastName: 'Ernst',
     company: 'EXOSIS',
     email: 'nikola.ernst@exosis.biz',
-    phone: '+1 (849) 454-2928',
     address: [
       {
         id: '1',
@@ -217,7 +242,6 @@ const Contact_data: Contact[] = [
     lastName: 'Helmfried',
     company: 'VENOFLEX',
     email: 'gustav.helmfried@venoflex.net',
-    phone: '+1 (855) 509-2581',
     address: [{
       streetNumber: '699',
       street: 'Caton Avenue',
@@ -248,7 +272,6 @@ const Contact_data: Contact[] = [
     lastName: 'Uwe',
     company: 'AQUOAVO',
     email: 'meta.uwe@aquoavo.info',
-    phone: '+1 (995) 419-2299',
     address: [{
       id: '4',
       streetNumber: '668',
@@ -280,7 +303,6 @@ const Contact_data: Contact[] = [
     lastName: 'Ingvar',
     company: 'MACRONAUT',
     email: 'valeria.ingvar@macronaut.io',
-    phone: '+1 (864) 520-2032',
     address: [{
       id: '7',
       streetNumber: '725',
@@ -312,7 +334,6 @@ const Contact_data: Contact[] = [
     lastName: 'Adalbert',
     company: 'EARBANG',
     email: 'helena.adalbert@earbang.co.uk',
-    phone: '+1 (808) 554-3681',
     address: [{
       id: '3',
       streetNumber: '286',
@@ -344,7 +365,6 @@ const Contact_data: Contact[] = [
     lastName: 'Augustine',
     company: 'DIGIRANG',
     email: 'bettina.augustine@digirang.tv',
-    phone: '+1 (912) 414-2356',
     address: [{
       id: '9',
       streetNumber: '634',
@@ -376,7 +396,6 @@ const Contact_data: Contact[] = [
     lastName: 'Barbara',
     company: 'UNEEQ',
     email: 'olga.barbara@uneeq.biz',
-    phone: '+1 (936) 433-3602',
     address: [{
       id: '22',
       streetNumber: '333',
@@ -408,7 +427,6 @@ const Contact_data: Contact[] = [
     lastName: 'Janine',
     company: 'KENEGY',
     email: 'emil.janine@kenegy.me',
-    phone: '+1 (912) 498-3942',
     address: [{
       id: '33',
       streetNumber: '476',
@@ -440,7 +458,6 @@ const Contact_data: Contact[] = [
     lastName: 'Mathias',
     company: 'KROG',
     email: 'wenzeslaus.mathias@krog.us',
-    phone: '+1 (853) 470-2303',
     address: [{
       id: '47',
       streetNumber: '346',
@@ -472,7 +489,6 @@ const Contact_data: Contact[] = [
     lastName: 'Kristina',
     company: 'GEEKY',
     email: 'erna.kristina@geeky.com',
-    phone: '+1 (906) 579-3413',
     address: [{
       id: '490',
       streetNumber: '647',

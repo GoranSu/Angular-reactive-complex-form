@@ -35,8 +35,8 @@ export class MyTableDialogComponent {
     // Initialize the first level of the form
     this.contactForm = this.formBuilder.group({
       picture: [this.contact.picture ? this.contact.picture : ''],
-      name: [this.contact.firstName ? this.contact.firstName : '', Validators.required],
-      lname: [this.contact.lastName ? this.contact.lastName : '', Validators.required],
+      firstName: [this.contact.firstName ? this.contact.firstName : '', Validators.required],
+      lastName: [this.contact.lastName ? this.contact.lastName : '', Validators.required],
       age: [this.contact.age ? this.contact.age : ''],
       email: [this.contact.email ? this.contact.email : '', [Validators.required, Validators.email]],
       company: [this.contact.company ? this.contact.company : ''],

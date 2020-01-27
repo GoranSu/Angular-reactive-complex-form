@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Contact, Address, Telephone } from '../my-table/my-table-datasource';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
@@ -10,13 +10,14 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   styleUrls: ['./my-table-dialog.component.css']
 })
 export class MyTableDialogComponent {
+  @Output() formContent: EventEmitter<Contact> = new EventEmitter<Contact>();
   // Define the formgroup
   contactForm: FormGroup;
   // Define the object
   contact: Contact;
   action: string;
   hide = false;
-
+  
   confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
 
   constructor(
@@ -39,7 +40,14 @@ export class MyTableDialogComponent {
       age: [this.contact.age ? this.contact.age : ''],
       email: [this.contact.email ? this.contact.email : '', [Validators.required, Validators.email]],
       company: [this.contact.company ? this.contact.company : ''],
-
+      
+      // Not showed in form, but used to send complete 
+      // information back to list-component for delete and update
+      about: [ this.contact.about ? this.contact.about: ''],
+      balance: [this.contact.balance ? this.contact.balance : ''],
+      eyeColor: [this.contact.eyeColor ? this.contact.eyeColor : ''],
+      guid: [this.contact.guid ? this.contact.guid : ''],
+      isActive: [this.contact.isActive ? this.contact.isActive : ''],
       // 1st nested array
       address: this.formBuilder.array([]),
     });
@@ -84,11 +92,6 @@ export class MyTableDialogComponent {
     });
     return arr;
 
-  }
-
-  saveForm() {
-    console.log(this.contactForm.value);
-    this.dialogRef.close('ok');
   }
 
   deleteAddress(index) {
@@ -190,11 +193,6 @@ export class MyTableDialogComponent {
     return null;
   }
 
-  // Send delete command from dialog to parent (list)
-  delete() {
-    this.dialogRef.close('delete');
-  }
-
   // Dont want to see the ugly html file upload?
   openFileInput() {
     document.getElementById('fileInput').click();
@@ -214,5 +212,24 @@ export class MyTableDialogComponent {
         picture: event.target.result
       });
     };
+  }
+
+  edit() {
+    this.dialogRef.close('edit');
+  }
+
+  save() {
+    if (this.contactForm.valid && this.contactForm.dirty) {
+      this.formContent.emit(this.contactForm.value);
+      this.dialogRef.close('save');
+    } else {
+      console.log('no changes sent to server')
+    }
+  }
+
+  // Send delete command from dialog to parent (list)
+  delete() {
+    this.formContent.emit(this.contactForm.value);
+    this.dialogRef.close('delete');
   }
 }

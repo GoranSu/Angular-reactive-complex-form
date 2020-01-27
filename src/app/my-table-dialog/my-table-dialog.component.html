@@ -135,8 +135,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button *ngIf="action === 'view'" mat-raised-button mat-dialog-close (click)="dialogRef.close('edit')">Edit</button>
+  <button *ngIf="action === 'view'" mat-raised-button mat-dialog-close (click)="edit()">Edit</button>
   <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
   <button mat-raised-button (click)="delete()">Delete</button>
-  <button mat-raised-button color="primary" [disabled]="!contactForm.valid" [hidden]="contactForm.disabled" (click)="saveForm()">Save</button>
+  <button mat-raised-button color="primary" [disabled]="!contactForm.valid" [hidden]="contactForm.disabled" (click)="save()">Save</button>
 </mat-dialog-actions>

@@ -1,5 +1,5 @@
 <div class="row">
-  <button class="centerMe" mat-icon-button color="blue-grey-200-bg" (click)="createContact()">
+  <button class="centerMe" mat-icon-button color="blue-grey-200-bg" (click)="openDialog('create', null)">
     <mat-icon>person_add</mat-icon>
   </button>
   <button *ngIf="selection.hasValue()" class="centerMe" mat-raised-button color="primary" (click)="removeSelectedRows()">

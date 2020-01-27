@@ -97,7 +97,7 @@ export class MyTableComponent implements OnInit {
       width: '1100px',
       data: {
         action: action,
-        row: row
+        row: row !== null ? row : new Contact
       }
     });
 

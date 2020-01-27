@@ -90,7 +90,6 @@ export class MyTableComponent implements OnInit {
     });
   }
 
-// When a user clicks on a row in a list, he calls this method, with the entire row information
   openDialog(action, row) {
     console.log(action, row)
     this.dialogRef = this.dialog.open(MyTableDialogComponent, {

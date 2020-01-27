@@ -53,7 +53,7 @@ export class MyTableComponent implements OnInit {
       if (result) {
         // If there is a result, call the delete method with params
         this.selection.selected.forEach(item => {
-          const index: number = this.dataSource.data.findIndex(d => d === item);
+          const index: number = this.dataSource.data.findIndex(d => d === item );
           this.dataSource.data.splice(index, 1);
 
           this.dataSource = new MatTableDataSource<Contact>(this.dataSource.data);
@@ -78,13 +78,13 @@ export class MyTableComponent implements OnInit {
       if (result) {
         // If there is a result, call the delete method with params
         console.log(row);
-        const index = this.dataSource.data.indexOf(row);
-        console.log(index);
-        if (index !== -1) {
-           this.dataSource.data.splice(index, 1);
-           this.dataSource = new MatTableDataSource<Contact>(this.dataSource.data);
-            this.dataSource.paginator = this.paginator;
-         }  
+        const indexOf = this.dataSource.data.findIndex(i => i.guid === row.guid);
+        console.log(indexOf);
+        if (indexOf !== -1) {
+          this.dataSource.data.splice(indexOf, 1);
+          this.dataSource = new MatTableDataSource<Contact>(this.dataSource.data);
+          this.dataSource.paginator = this.paginator;
+        }  
       }
       this.confirmDialogRef = null;
     });

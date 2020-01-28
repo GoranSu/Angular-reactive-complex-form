@@ -19,7 +19,8 @@ MatMenuModule,
 MatSidenavModule,
 MatCheckboxModule,
 MatPaginatorModule,
-MatTableModule } from '@angular/material';
+MatTableModule,MatStepperModule } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -28,6 +29,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { MyTableDialogComponent } from './my-table-dialog/my-table-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PhoneReactiveFormComponent } from './phone-reactive-form/phone-reactive-form.component';
+import { MyTableDialogStepperComponent } from './my-table-dialog-stepper/my-table-dialog-stepper.component';
 
 @NgModule({
   imports:      [ 
@@ -49,6 +51,7 @@ import { PhoneReactiveFormComponent } from './phone-reactive-form/phone-reactive
     BrowserAnimationsModule,
     MatFormFieldModule,
     NgbModule,
+    MatStepperModule,
     RouterModule.forRoot([
       {
         path: '',
@@ -67,9 +70,10 @@ import { PhoneReactiveFormComponent } from './phone-reactive-form/phone-reactive
       LandingPageComponent,
       MyTableDialogComponent,
       ConfirmDialogComponent,
-      PhoneReactiveFormComponent
+      PhoneReactiveFormComponent,
+      MyTableDialogStepperComponent
      ],
   bootstrap:    [ AppComponent ],
-  entryComponents: [MyTableDialogComponent, ConfirmDialogComponent]
+  entryComponents: [ MyTableDialogComponent, MyTableDialogStepperComponent, ConfirmDialogComponent]
 })
 export class AppModule { }

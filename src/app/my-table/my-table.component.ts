@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { MatPaginator, MatSort, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MyTableDialogComponent } from '../my-table-dialog/my-table-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MyTableDialogStepperComponent } from '../my-table-dialog-stepper/my-table-dialog-stepper.component';
 
 @Component({
   selector: 'app-my-table',
@@ -17,11 +18,23 @@ export class MyTableComponent implements OnInit {
   selection = new SelectionModel<Contact>(true, []);
   confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'age', 'company', 'balance', 'buttons'];
+  displayedColumns = [];
   dialogRef: any;
   filterValue: string = '';
+  innerWidth: any;
 
   constructor(private dialog: MatDialog) { }
+
+  @HostListener('window:resize', ['$event'])
+    onResize(event) {
+      this.innerWidth = window.innerWidth;
+      console.log(this.innerWidth)
+      if(this.innerWidth < 700){
+        this.displayedColumns = ['select', 'firstName', 'lastName'];
+      } else {
+        this.displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'age', 'company', 'balance', 'buttons'];
+      }
+  }
 
   ngOnInit() {
      this.materialTableData = Object.assign(Contact_data);
@@ -124,6 +137,28 @@ export class MyTableComponent implements OnInit {
         } else if (result === 'delete') {
           this.deletePrompt(formValue);
         } else if (result === 'save') {
+          this.createContact(formValue);
+        }
+      });
+  }
+
+// For new contacts
+openStepperDialog() {
+    this.dialogRef = this.dialog.open(MyTableDialogStepperComponent, {
+      width: '1100px'
+    });
+
+    var formValue: Contact;
+    this.dialogRef.componentInstance.formContent.subscribe((emittedValue: Contact) => {
+      formValue = emittedValue;
+    });
+
+    this.dialogRef.afterClosed()
+      .subscribe(result => {
+        if (!result) {
+          return;
+        }
+        else if (result === 'save') {
           this.createContact(formValue);
         }
       });

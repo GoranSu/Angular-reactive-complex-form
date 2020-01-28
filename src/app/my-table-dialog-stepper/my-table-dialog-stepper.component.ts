@@ -1,98 +1,80 @@
 import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { Contact, Address, Telephone } from '../my-table/my-table-component';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Contact, Address, Telephone } from '../my-table/my-table-component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-my-table-dialog',
-  templateUrl: './my-table-dialog.component.html',
-  styleUrls: ['./my-table-dialog.component.css']
+  selector: 'app-my-table-dialog-stepper',
+  templateUrl: './my-table-dialog-stepper.component.html',
+  styleUrls: ['./my-table-dialog-stepper.component.css']
 })
-export class MyTableDialogComponent {
+export class MyTableDialogStepperComponent {
   @Output() formContent: EventEmitter<Contact> = new EventEmitter<Contact>();
-  // Define the formgroup
+
   contactForm: FormGroup;
-  // Define the object
   contact: Contact;
-  action: string;
-  hide = false;
-  
+
   confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
 
-  constructor(
-    public dialog: MatDialog,
-    public dialogRef: MatDialogRef<MyTableDialogComponent>,
-    private formBuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder, public dialog: MatDialog,
+    public dialogRef: MatDialogRef<MyTableDialogStepperComponent>,
     // get data from parent component
-    @Inject(MAT_DIALOG_DATA) private data
-  ) {
-
-    // Fill your object with data
-    this.contact = data.row;
-    this.action = data.action;
-
-    // Initialize the first level of the form
-    this.contactForm = this.formBuilder.group({
-      picture: [this.contact.picture ? this.contact.picture : ''],
-      firstName: [this.contact.firstName ? this.contact.firstName : '', Validators.required],
-      lastName: [this.contact.lastName ? this.contact.lastName : '', Validators.required],
-      age: [this.contact.age ? this.contact.age : ''],
-      email: [this.contact.email ? this.contact.email : '', [Validators.required, Validators.email]],
-      company: [this.contact.company ? this.contact.company : ''],
+    @Inject(MAT_DIALOG_DATA) private data) {
+      this.contactForm = this.formBuilder.group({
+      picture: [''],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      age: [''],
+      email: ['', [Validators.required, Validators.email]],
+      company: [''],
       
       // Not showed in form, but used to send complete 
       // information back to list-component for delete and update
-      about: [ this.contact.about ? this.contact.about: ''],
-      balance: [this.contact.balance ? this.contact.balance : ''],
-      eyeColor: [this.contact.eyeColor ? this.contact.eyeColor : ''],
-      guid: [this.contact.guid ? this.contact.guid : ''],
-      isActive: [this.contact.isActive ? this.contact.isActive : ''],
+      about: [''],
+      balance: [''],
+      eyeColor: [''],
+      guid: [''],
+      isActive: [''],
       // 1st nested array
       address: this.formBuilder.array([]),
     });
 
-    // Method that handles populating the nested array
-    this.setAddress();
+    //  this.setAddress();
+    // }
 
-    if (this.action === 'view') {
-      this.contactForm.disable();
-      this.hide = true;
-    }
+    // setAddress() {
+    // const control = <FormArray>this.contactForm.get('address');
+    // this.contact.address.forEach(x => {
+    //   control.push(
+    //     this.formBuilder.group({
+    //       streetNumber: [x.streetNumber ? x.streetNumber : '', Validators.required],
+    //       street: [x.street ? x.street : ''],
+    //       zipCode: [x.zipCode ? x.zipCode : ''],
+    //       city: [x.city ? x.city : ''],
+    //       state: [x.state ? x.state : ''],
+    //       // 2nd level of array
+    //       telephone: this.setPhones(x)
+    //     })
+    //   );
+    // });
   }
 
-  setAddress() {
-    const control = <FormArray>this.contactForm.get('address');
-    this.contact.address.forEach(x => {
-      control.push(
-        this.formBuilder.group({
-          streetNumber: [x.streetNumber ? x.streetNumber : '', Validators.required],
-          street: [x.street ? x.street : ''],
-          zipCode: [x.zipCode ? x.zipCode : ''],
-          city: [x.city ? x.city : ''],
-          state: [x.state ? x.state : ''],
-          // 2nd level of array
-          telephone: this.setPhones(x)
-        })
-      );
-    });
-  }
+  // setPhones(x) {
+  //   const arr = new FormArray([]);
+  //   x.telephone.forEach(y => {
+  //     arr.push(
+  //       this.formBuilder.group({
+  //         phones: this.formBuilder.group({
+  //           id: [y.id ? y.id : '', Validators.required],
+  //           number: [y.number ? y.number : '', [Validators.required, Validators.minLength(4)]]
+  //         })
+  //       })
+  //     );
+  //   });
+  //   return arr;
 
-  setPhones(x) {
-    const arr = new FormArray([]);
-    x.telephone.forEach(y => {
-      arr.push(
-        this.formBuilder.group({
-          phones: this.formBuilder.group({
-            id: [y.id ? y.id : '', Validators.required],
-            number: [y.number ? y.number : '', [Validators.required, Validators.minLength(4)]]
-          })
-        })
-      );
-    });
-    return arr;
-
-  }
+  // }
 
   deleteAddress(index) {
     const addressFormArray = <FormArray>this.contactForm.controls.address;
@@ -173,7 +155,7 @@ export class MyTableDialogComponent {
 
   // send address
   getPhones(addForm) {
-    return addForm ['controls'].telephone['controls'];
+    return addForm['controls'].telephone['controls'];
   }
 
   // Custom error messages
@@ -214,10 +196,6 @@ export class MyTableDialogComponent {
     };
   }
 
-  edit() {
-    this.dialogRef.close('edit');
-  }
-
   save() {
     if (this.contactForm.valid && this.contactForm.dirty) {
       this.formContent.emit(this.contactForm.value);
@@ -225,11 +203,5 @@ export class MyTableDialogComponent {
     } else {
       console.log('no changes sent to server')
     }
-  }
-
-  // Send delete command from dialog to parent (list)
-  delete() {
-    this.formContent.emit(this.contactForm.value);
-    this.dialogRef.close('delete');
   }
 }

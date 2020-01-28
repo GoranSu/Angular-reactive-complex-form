@@ -1,0 +1,145 @@
+<mat-vertical-stepper linear #stepper>
+  
+  <mat-step [stepControl]="contactForm" 
+            errorMessage="Name is required.">
+    <form [formGroup]="contactForm">
+      <ng-template matStepLabel>Fill out your details</ng-template>
+        <div class="row">
+          <div class="breaker">
+            <mat-form-field>
+              <input matInput formControlName="firstName" placeholder="First name" required>
+              <mat-error>Name is required.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="breaker">
+            <mat-form-field>
+              <input matInput formControlName="lastName" placeholder="Last name" required>
+              <mat-error>Last name is required.</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="age" placeholder="Age">
+          </mat-form-field>
+        </div>
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="email" placeholder="Email" required>
+            <mat-error>{{getEmailErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+        </div>
+        <div class="row">
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="company" placeholder="Company">
+          </mat-form-field>
+        </div>
+        <div class="breaker">
+          <mat-form-field>
+            <input matInput formControlName="balance" placeholder="Balance">
+          </mat-form-field>
+        </div>
+        </div>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+<mat-step [stepControl]="contactForm" 
+          [optional]="true"
+          errorMessage="Address is required.">
+  <ng-template matStepLabel>Fill out your address</ng-template>
+<form [formGroup]="contactForm">
+      <div formArrayName='address'>
+        <div *ngFor="let add of getAddress(contactForm); let i=index">
+        <!--Address-->
+        <h4>Address {{i+1}}:</h4>
+        <div [formGroupName]="i">
+          <div class="row">
+            <mat-form-field class="breaker">
+              <input matInput formControlName="street" placeholder="Street" required>
+              <mat-error>Street is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="breaker">
+              <input matInput formControlName="streetNumber" placeholder="Street number" required>
+              <mat-error>Street number is required.</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field class="breaker">
+              <input matInput formControlName="city" placeholder="City">
+            </mat-form-field>
+            <mat-form-field class="breaker">
+              <input matInput formControlName="zipCode" placeholder="ZipCode">
+              <mat-error>{{getZipCodeErrorMessage(i)}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field class="breaker">
+              <input matInput formControlName="state" placeholder="State">
+            </mat-form-field>
+          </div>
+          <div formArrayName="telephone">
+            <div *ngFor="let project of getPhones(add); let j=index">
+              <!--Telephone array iterations-->
+              <div [formGroupName]="j">
+                <div class="row">
+                  <div class="breaker">
+                  <app-phone-reactive-form formGroupName="phones"></app-phone-reactive-form>
+                </div>
+                  <!--Delete telephone-->
+                  <button class="breaker" [hidden]="contactForm.disabled" mat-icon-button (click)="deletePhonePrompt(add.controls.telephone, j)">
+                    <mat-icon>
+                      delete
+                    </mat-icon>
+                  </button>
+                  <!--Delete telephone-->
+                </div>
+              </div>
+              <!--Telephone array iterations-->
+            </div>
+            <button mat-stroked-button color="primary" [disabled]="!contactForm.valid" [hidden]="contactForm.disabled" (click)="addNewPhone(add.controls.telephone)">
+              Add new phone
+            </button>
+            &nbsp;
+              <!--Delete address-->
+            <button mat-stroked-button type="button" color="warn" (click)="deleteAddressPrompt(i)" [hidden]="contactForm.disabled">
+              Delete address
+            </button>
+            <!--Delete address-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <button mat-stroked-button color="primary" [hidden]="contactForm.disabled" [disabled]="!contactForm.valid" (click)="addNewAddress()">Add new
+      address
+    </button>
+</form>
+
+  <div>
+    <button mat-button matStepperPrevious>Back</button>
+    <button mat-button matStepperNext>Next</button>
+  </div>
+</mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-raised-button matStepperPrevious>Back</button>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button (click)="stepper.reset()">Reset</button>
+      <button mat-raised-button 
+              [disabled]="!contactForm.valid" 
+              [hidden]="contactForm.disabled"
+              (click)="save()">
+              Save
+      </button>
+    </div>
+  </mat-step>
+
+</mat-vertical-stepper>

@@ -37,7 +37,7 @@ export class PhoneReactiveFormComponent implements OnInit {
       numberFC.setErrors(null);
     }
     if (numberFC.hasError('errorLength')) {
-        return 'Value can be 4 characters long.';
+        return 'Value can be 12 characters long.';
     }
   }
 }

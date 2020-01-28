@@ -1,5 +1,3 @@
-
-
 <mat-toolbar>
   <span>Search contacts:</span>
   <mat-form-field>
@@ -12,10 +10,15 @@
   </button>
   <span class="spacer"></span>
   <button *ngIf="selection.hasValue()" mat-stroked-button color="warn" (click)="removeSelectedRows()">Delete selection</button>
-  <button mat-stroked-button color="primary" (click)="openDialog('create', null)">Add contact</button>
+  <button mat-stroked-button color="primary" (click)="openStepperDialog()">Add contact</button>
 </mat-toolbar>
 
   <table  mat-table #table [dataSource]="dataSource" matSort aria-label="Elements">
+    
+    <ng-container media="(max-width: 450px)">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Test </th>
+      <td mat-cell *matCellDef="let row; let i = index">{{i}}</td>
+    </ng-container>
 
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -46,12 +49,16 @@
 
     <ng-container matColumnDef="firstName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
-      <td mat-cell *matCellDef="let row">{{row.firstName}}</td>
+      <td mat-cell *matCellDef="let row">
+          {{row.firstName}}
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="lastName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
-      <td mat-cell *matCellDef="let row">{{row.lastName}}</td>
+      <td mat-cell *matCellDef="let row">
+         {{row.lastName}}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="age">

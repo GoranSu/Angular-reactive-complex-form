@@ -18,7 +18,7 @@ export class MyTableComponent implements OnInit {
   selection = new SelectionModel<Contact>(true, []);
   confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = [];
+  displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'age', 'company', 'balance', 'buttons'];
   dialogRef: any;
   filterValue: string = '';
   innerWidth: any;

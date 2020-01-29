@@ -28,7 +28,6 @@ export class MyTableComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
     onResize(event) {
       this.innerWidth = window.innerWidth;
-      console.log(this.innerWidth)
       if(this.innerWidth < 700){
         this.displayedColumns = ['select', 'firstName', 'lastName'];
       } else {
@@ -145,7 +144,7 @@ export class MyTableComponent implements OnInit {
 // For new contacts
 openStepperDialog() {
     this.dialogRef = this.dialog.open(MyTableDialogStepperComponent, {
-      width: '1100px'
+      width: '600px'
     });
 
     var formValue: Contact;

@@ -1,3 +1,8 @@
 .breaker {
   padding-left: 10px;
 }
+
+.mat-elevation-z2 {
+  margin-bottom: 1%;
+  padding: 15px;
+}

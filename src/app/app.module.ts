@@ -19,8 +19,8 @@ MatMenuModule,
 MatSidenavModule,
 MatCheckboxModule,
 MatPaginatorModule,
-MatTableModule,MatStepperModule } from '@angular/material';
-
+MatTableModule,
+MatStepperModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -52,6 +52,7 @@ import { MyTableDialogStepperComponent } from './my-table-dialog-stepper/my-tabl
     MatFormFieldModule,
     NgbModule,
     MatStepperModule,
+    MatExpansionModule,
     RouterModule.forRoot([
       {
         path: '',

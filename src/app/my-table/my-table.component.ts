@@ -18,12 +18,12 @@ export class MyTableComponent implements OnInit {
   selection = new SelectionModel<Contact>(true, []);
   confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'age', 'company', 'balance', 'buttons'];
+  displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'city', 'age', 'company', 'balance', 'buttons'];
   dialogRef: any;
   filterValue: string = '';
   innerWidth: any;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {}
 
   @HostListener('window:resize', ['$event'])
     onResize(event) {
@@ -31,7 +31,7 @@ export class MyTableComponent implements OnInit {
       if(this.innerWidth < 700){
         this.displayedColumns = ['select', 'firstName', 'lastName'];
       } else {
-        this.displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'age', 'company', 'balance', 'buttons'];
+        this.displayedColumns = ['select', 'picture', 'firstName', 'lastName', 'city', 'age', 'company', 'balance', 'buttons'];
       }
   }
 
@@ -39,10 +39,44 @@ export class MyTableComponent implements OnInit {
      this.materialTableData = Object.assign(Contact_data);
      this.dataSource = new MatTableDataSource(this.materialTableData);
      this.dataSource.paginator = this.paginator;
+
+     if (this.sort !== undefined) {
+        this.dataSource.sortingDataAccessor = (item, property) => {
+            switch (property) {
+                case 'city':
+                    return item.address[0].city;
+                default:
+                    return item[property];
+            }
+        }
+    }
+     this.dataSource.sort = this.sort;
   }
 
+  nestedFilterCheck(search, data, key) {
+        if (typeof data[key] === 'object') {
+            for (const k in data[key]) {
+                if (data[key][k] !== null) {
+                    search = this.nestedFilterCheck(search, data[key], k);
+                }
+            }
+        } else {
+            search += data[key];
+        }
+        return search;
+    }
+
   applyFilter(filterValue: string) {
-    console.log(filterValue)
+    this.dataSource.filterPredicate = (data, filter: string) => {
+    const accumulator = (currentTerm, key) => {
+      return this.nestedFilterCheck(currentTerm, data, key);
+    };
+    const dataStr = Object.keys(data).reduce(accumulator, '').toLowerCase();
+    // Transform the filter by converting it to lowercase and removing whitespace.
+    const transformedFilter = filter.trim().toLowerCase();
+    return dataStr.indexOf(transformedFilter) !== -1;
+    };
+
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
